@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATN</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static',filename='Pictures/bachkhoa.ico')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script defer>
+        var socket = io.connect('http://127.0.0.1:5000');
+        i = 0;
+        socket.on('connect', function() {
+            console.log('socket connected');
+        })
+        socket.emit('guidi',i);
+        console.log('abc');
+        setInterval(function(){
+            console.log('interval');
+            socket.emit('guidi',i);
+            }
+        ,1000);
+        socket.on('mess_from_server',(msg)=>{
+            if (JSON.parse(msg)["tendoituong"]=="chuoisuneo"){
+                $('.object').html('CHUỖI SỨ NÉO');
+                $('.objecthanhdong').html('DỪNG LẠI');
+            }
+            else if (JSON.parse(msg)["tendoituong"]=="khungdinhvi"){
+                $('.object').html('KHUNG ĐỊNH VỊ');
+                $('.objecthanhdong').html('CHẠY QUA');
+            }
+            else if (JSON.parse(msg)["tendoituong"]=="chuoisudung"){
+                $('.object').html('CHUỖI SỨ ĐỨNG');
+                if (JSON.parse(msg)["cambien"]==0){
+                    $('.objecthanhdong').html('VƯƠNG BƯỚC');
+                }
+                else{
+                    $('.objecthanhdong').html('LÙI BƯỚC');
+                }
+            }
+            else {$('.object').html(JSON.parse(msg)["tendoituong"]);
+		            $('.objecthanhdong').html('ĐI TIẾP');
+                }
+            if (JSON.parse(msg)["Nhietdo"]>40){
+                $('.objecttemp').html('Cảnh báo nhiệt độ');}
+	        else {$('.objecttemp').html(JSON.parse(msg)["Nhietdo"]);}       
+    })
+    </script>
+</head>
+<body>
+    
+    <div class="container">
+       <img src="{{url_for('static',filename='Pictures/daihocbachkhoa.jpg')}}" class="anh1">
+        <img src="{{url_for('static',filename='Pictures/logo khoadien.png')}}" class="anh2">
+        <!-- <div class="thongtin1" style="color:rgb(39, 105, 67);">
+            ĐẠI HỌC ĐÀ NẴNG<br>
+            TRƯỜNG ĐẠI HỌC BÁCH KHOA<br>
+            KHOA ĐIỆN        </div> -->
+        <div class="thongtin2" style="color:rgb(39, 105, 67);">
+            <div class="thongtin21">ĐỒ ÁN TỐT NGHIỆP NĂM 2020</div>
+            <div class='thongtin212'>
+              <div class="thongtin22">
+                  ĐỀ TÀI<br>
+                  SVTH<br>
+                  GVHD
+              </div>
+              <div class="thongtin23">
+                  :<br>:<br>:
+              </div>
+              <div class="thongtin24">
+                  <em>ỨNG DỤNG IOT ĐIỀU KHIỂN ROBOT</em><br>
+                  TRƯƠNG ĐÌNH THÀNH NGUYÊN - TRẦN TUẤN THÀNH<br>
+                  TS.NGUYỄN HOÀNG MAI
+              </div>
+          </div>
+            
+        </div>
+        <div class="maunen"></div>
+        <div class='daihocbk'>TRƯỜNG ĐẠI HỌC BÁCH KHOA</div>
+        <div class='khoadien'>KHOA ĐIỆN</div>
+    </div>
+    <div class="stream-section">
+        <img src="{{ url_for('video_feed')}}" alt="day la video">
+    </div>
+    <div class="tenthongtintruyvan">BẢNG GIÁM SÁT</div>
+    <div class='cachsudung'>Cách sử dụng</div>
+    <div class='bangcachsudung'><p>Bằng cách theo dõi những thông số trên bảng giám sát , người dùng
+        có thể biết được chính xác vị trí và hành động tiếp theo của robot , đồng thời thông số nhiệt độ
+        cũng được tích hợp để tiện theo dõi</p>
+    </div>
+    <div class='truyvan'>
+        <div class="vatthe">
+            <p class="subject" style="left:20px;">VẬT THỂ:</p>
+            <p class="object">aaaa</p>
+        </div>
+        <div class='nhietdo'>
+            <p class="subjecttemp">NHIỆT ĐỘ:</p>
+            <p class="objecttemp">NONE</p>
+        </div>
+        <div class='hanhdong'>
+            <p class="subjecthanhdong">HÀNH ĐỘNG:</p>
+            <p class="objecthanhdong">None</p>
+        </div>  
+    </div>
+    <div class="footer">
+        <div class='footer-left'>
+            <h3>ĐỒ ÁN TỐT NGHIỆP</h3>
+            <!-- <div class='footer-links'>
+                <a href="#" class="link1">HOME</a>
+                <a href="#">HELP</a>
+                <a href="#">ABOUT</a>
+                <a href="#">CONTACT</a>
+            </div> -->
+            <p class="footer-copyright">
+                Copyright&copy; 2020 Thành Nguyên - Tuấn Thành
+            </p>
+        </div>
+        <div class="footer-center">
+            <div>
+                <i class='fa fa-map-marker'></i>
+                <p>Hòa Khánh Bắc, Quận Liên Chiểu , Đà Nẵng</p>
+            </div>
+        </div>
+        <div class='social'>
+            <div class='footer-social'>
+                <a href='#'><i class='fa fa-facebook'></i></a>
+                <a href='#'><i class='fa fa-twitter'></i></a>
+                <a href='#'><i class='fa fa-linkedin'></i></a>
+                <a href='#'><i class='fa fa-github'></i></a>
+            </div>
+        </div>
+    </div>
+    
+   
+   
+</body>
+</html>
